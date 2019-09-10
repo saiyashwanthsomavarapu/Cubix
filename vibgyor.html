@@ -1,0 +1,302 @@
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="vibgyor2.css" type="text/css">
+</head>
+<body onload="gamestart()">
+<canvas id="canvas" height=600 width=800></canvas>
+<div id="buttons">
+<button id="a1" onclick="gamearea.restart()">Restart</button>
+
+<button id="a2" onclick="gamearea.pause()">Pause</button>
+
+<button id="a3" onclick="gamearea.resume()">Resume</button>
+</div>
+<h1 id="suresh">Game over</h1>
+<h1 id="suresh1">Pause</h1>
+<script>
+var canvas=document.getElementById("canvas");
+var context=canvas.getContext("2d");
+var i,frame=0,toy,tox,arrx=[125,175,225,275,325,375,425,125,375,175,425,325],arry=[125,175,225,275,325,375,425,175,225,325,425];
+var arrc=["violet","indigo","blue","green","yellow","orange","red","violet","blue","indigo","green"];
+var obstacle1=[],obstacle2=[],score=0,c,targ=[0],d1=[0,0,0,0,0,0,0],d2=[0,0,0,0,0,0,0];
+var g1,g2;
+var mySound;
+var myMusic;
+function gamestart()
+{
+	gamepiece=new component(275,275,"white");
+	mySound = new sound("back.mp3");
+    myMusic = new sound("attack.mp3");
+    mySound.play();
+	gamearea.start();
+}
+window.addEventListener('keyup',function(e){
+	if(e.keyCode == 37 && gamepiece.x >= 175 && gamepiece.x <= 475){gamepiece.x-=50; myMusic.play();}
+	else if(e.keyCode == 39 && gamepiece.x >= 125 && gamepiece.x <= 375){gamepiece.x+=50;myMusic.play(); }
+	else if(e.keyCode == 38 && gamepiece.y >= 175 && gamepiece.y <= 425){gamepiece.y-=50; myMusic.play();}
+	else if(e.keyCode == 40 && gamepiece.y >= 125 && gamepiece.y <= 375){gamepiece.y+=50; myMusic.play();}
+				})
+var gamearea = {
+						start:function(){
+											this.interval=setInterval(updategamearea,20);
+											this.sem=0;
+																	
+										},
+						clear:function(){
+											context.clearRect(0,0,canvas.width,canvas.height);
+											
+										},
+						
+						stop:function(){
+										context.font="70px Old English Text MT"
+										context.fillStyle="orange";
+									<!--	context.fillText("Game over",115,275);-->
+									    canvas.style.opacity="0.1";
+										suresh.style.display="block";
+										mySound.stop();
+										clearInterval(this.interval);
+										this.sem=2;
+										},
+						pause:function(){
+										if(this.sem==0)
+										{
+										context.font="70px Old English Text MT"
+										context.fillStyle="orange";
+									<!--	context.fillText("Pause",115,275);-->
+									 canvas.style.opacity="0.1";
+									suresh1.style.display="block";
+									
+										clearInterval(this.interval);
+										this.sem=1;
+										}
+										},
+						resume:function(){
+										if(this.sem==1)
+										{
+										canvas.style.opacity="1";
+										suresh1.style.display="none";
+										this.sem=0;
+										this.start();
+										}
+										},
+						restart:function(){
+												window.location="vibgyor.html";
+										}
+						
+				};
+function sound(src)
+{
+	this.sound=document.createElement("audio");
+    this.sound.src = src;
+    this.sound.setAttribute("preload", "auto");
+    this.sound.setAttribute("controls", "none");
+    this.sound.style.display = "none";
+    document.body.appendChild(this.sound);
+    this.play = function(){
+        this.sound.play();
+    }
+    this.stop = function(){
+        this.sound.pause();
+    }
+}
+function component(x,y,color)
+{
+		this.x=x;
+		this.y=y;
+		this.color=color;
+		this.update=function(){
+								context.beginPath();
+								context.arc(this.x,this.y,15,0,2*Math.PI);
+								context.fillStyle=this.color;
+								context.fill();
+								context.stroke();
+							  }
+		this.crashwith=function(obs)
+		{
+								var obx=obs.x,oby=obs.y,gpx=this.x,gpy=this.y;
+								var obl=obx-15,obr=obx+15,obt=oby-15,obb=oby+15;
+								var gpl=gpx-15,gpr=gpx+15,gpt=gpy-15,gpb=gpy+15;
+								if(((oby==gpy)&&((obl<=gpr && obl>=gpl)|| (obr>=gpl && obr<=gpr))) ||
+									((obx==gpx)&&((obt<=gpb && obt>=gpt)|| (obb>=gpt && obb<=gpb))))
+								{
+									return true;	
+								}
+								return false;
+		
+		}
+		this.rcrashwith=function(obs)
+		{
+			                    var obx=obs.rx+7.5,oby=obs.ry+7.5,gpx=this.x,gpy=this.y;
+								var obl=obx-7.5,obr=obx+7.5,obt=oby-7.5,obb=oby+7.5;
+								var gpl=gpx-15,gpr=gpx+15,gpt=gpy-15,gpb=gpy+15;
+								if(((oby==gpy)&&((obl<=gpr && obl>=gpl)|| (obr>=gpl && obr<=gpr))) ||
+									((obx==gpx)&&((obt<=gpb && obt>=gpt)|| (obb>=gpt && obb<=gpb))))
+								{
+									return true;	
+								}
+								return false;
+		}
+		
+}
+function colorcomponent(x1,y1,rcolor)											
+{
+	this.rx=x1;
+	this.ry=y1;
+	this.rcolor=rcolor;
+	this.rupdate=function()
+				{
+					context.fillStyle=this.rcolor;
+					context.fillRect(this.rx,this.ry,15,15);
+				}
+}
+function updategamearea()
+{
+		gamearea.clear(); 
+		gamepiece.update();
+		toy=100;tox=100;
+		for(i=0;i<8;i++)
+		{
+			context.moveTo(100,toy);
+			context.lineTo(450,toy);
+			context.stroke();                  /*this for loop creates table*/
+			toy+=50;
+			context.moveTo(tox,100);
+			context.lineTo(tox,450);
+			context.stroke();
+			tox+=50;	
+		}
+		for(i=0;i<targ.length;i++)
+		{
+			if(targ[i]==0)
+			{
+				g1=d1[i];
+				g2=d2[i];
+				d1[i]=Math.floor(Math.random()*10);
+				d2[i]=Math.floor(Math.random()*10);
+				if((gamepiece.x==arrx[d1[i]] && gamepiece.y==arry[d2[i]]) ||  (g1==d1[i] && g2==d2[i]))
+				{
+					i--;
+					continue;
+				}
+				targ[i]=1;
+			}
+		    context.save();
+		    context.translate(arrx[d1[i]],arry[d2[i]]);
+			context.rotate(30*Math.PI/180);
+			context.fillStyle=arrc[d1[i]];
+			context.fillRect(30/-2,30/-2,25,25);
+			context.restore();
+
+			if(gamepiece.x==arrx[d1[i]] && gamepiece.y==arry[d2[i]])
+			{
+				if(gamepiece.color==arrc[d1[i]])
+				{	targ[i]=0;
+					score+=1;
+					myMusic.play();
+				   if(score==7 || score==25 || score==40 || score==65 || score==80 || score==100)
+					{
+						targ.push(0);
+					}
+					if(score==120)
+					{
+						context.font="70px Old English Text MT";
+						context.fillStyle="orange";
+						context.fillText("You won",70,275);
+						clearInterval(gamearea.interval);
+		
+					}
+				}
+				else
+				{
+					gamearea.stop();
+				}
+			}
+		}
+		myscore="score:"+score;
+		context.font="70px Old English Text MT";
+		context.fillStyle="orange";
+		context.fillText(myscore,450,50);
+		if((frame%147)==0)
+		{
+				obstacle1.push(new component(125.0,0,"black"));
+				obstacle1.push(new component(175.0,0,"black"));
+	
+		}
+		if((frame%157)==0)
+		{
+			var c=Math.floor(Math.random()*10);
+			if(c < 6)
+			{
+				obstacle1.push(new component(225.0,0,"black"));
+				obstacle1.push(new component(275,0,"black"));
+			}
+			else
+			{
+				obstacle1.push(new component(275.0,0,"black"));
+				obstacle1.push(new component(325.0,0,"black"));
+			}
+		}
+		if((frame%149) == 0)
+		{
+				obstacle1.push(new component(375.0,0,"black"));
+				obstacle1.push(new component(425.0,0,"black"));
+			
+		}
+		if(((frame-73)%147)==0)
+		{
+				var d=Math.floor(Math.random()*10);
+				obstacle2.push(new colorcomponent(117.5,0,arrc[d]));
+				obstacle2.push(new colorcomponent(167.5,0,arrc[d+1]));
+	
+		}
+		if(((frame-78)%157)==0)
+		{
+			var d=Math.floor(Math.random()*10);
+			if(d < 6)
+			{
+				obstacle2.push(new colorcomponent(217.5,0,arrc[d]));
+				obstacle2.push(new colorcomponent(267.5,0,arrc[d+1]));
+			}
+			else
+			{
+				obstacle2.push(new colorcomponent(267.5,0,arrc[d]));
+				obstacle2.push(new colorcomponent(317.5,0,arrc[d+1]));
+			}
+		}
+		if(((frame-79)%149) == 0)
+		{
+				var d=Math.floor(Math.random()*10);
+				obstacle2.push(new colorcomponent(367.5,0,arrc[d]));
+				obstacle2.push(new colorcomponent(417.5,0,arrc[d+1]));
+			
+		}
+		for(i=0;i<obstacle2.length;i+=1)
+		{
+			obstacle2[i].ry+=1.7;
+			obstacle2[i].rupdate();
+		}
+		for(i=0;i<obstacle1.length;i++)
+		{
+			obstacle1[i].y+=1.7;
+			obstacle1[i].update();
+		}
+		for(i=0;i<obstacle1.length;i++)
+		{
+			if(gamepiece.crashwith(obstacle1[i]))
+			{
+				gamearea.stop();
+			}
+		}
+		for(i=0;i<obstacle2.length;i++)
+		{
+			if(gamepiece.rcrashwith(obstacle2[i]))
+			{
+				gamepiece.color=obstacle2[i].rcolor;
+			}
+		}
+		frame+=1;
+}
+</script>
+</body>
+</html>

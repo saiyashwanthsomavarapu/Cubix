@@ -1,0 +1,61 @@
+
+body{
+overflow-x:hidden;
+	overflow-y:hidden;
+	background-color:rgb(204, 224, 255);
+}
+#set1 {position:fixed;eight:500px;background-color:rgb(120,150,155);}
+#suresh {text-align:center;margin-top:280px;margin-right:250px;font-family:Old English Text MT;font-size:70px;color:orange;display:none;}
+#suresh1 {text-align:center;margin-top:280px;margin-right:250px;font-family:Old English Text MT;font-size:70px;color:orange;display:none;}
+#instruction {background-color:lightgreen;height:94%;width:18%;margin-left:538px;opacity:0.3;content:INSTRUCTIIONS;}
+#instruction:hover {box-shadow:0 8px 16px 0 rgb(120,120,120);}
+
+canvas
+{
+	position:absolute;
+	top:50%;
+	left:55%;
+	transform:translate(-50%,-50%);
+	border:2px solid brown;
+	background-color:#ffff99;
+}
+#a1 {
+	position:absolute;
+	top:38%;
+	left:7%;
+	border:0px solid white;
+	font-size:20px;
+	padding:3px 17px 3px 17px;
+	font-family:Old English Text MT;
+	letter-spacing:2px;	
+	transition:0.15;
+}
+#a1:hover {background-color:rgb(153,153,255);color:white; box-shadow: 0 32px 16px 0 rgb(120,150,155);	}
+#a2{
+	position:absolute;
+	top:50%;
+	left:7%;
+	font-size:20px;
+	padding:3px 17px 3px 17px;
+	font-family:Old English Text MT;
+		
+	transition:0.15;
+	width:100px;
+	border:0px solid white;
+	letter-spacing:2px;
+	color:
+	}
+#a2:hover {background-color:orange;color:white; box-shadow: 0 32px 16px 0 rgb(120,120,120);	}
+#a3{
+	position:absolute;
+	top:62%;
+	left:7%;
+	font-size:20px;	
+	transition:0.15;
+	padding:3px 17px 3px 17px;
+	font-family:Old English Text MT;
+	border:0px solid white;
+	letter-spacing:2px;
+}
+#a3:hover {background-color:red;color:white; box-shadow: 0 32px 16px 0 rgb(120,120,120);}
+
